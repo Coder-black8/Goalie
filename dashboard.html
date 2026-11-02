@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My goals | Goalie</title>
+    <link rel="stylesheet" href="design.css">
+</head>
+<style>
+    /* Goalie dashboard design */
+:root {
+  --ink: #14281c; --muted: #5b6b61; --line: #dbe6de; --bg: #f2f7f3; --card: #fff;
+  --green: #15803d; --green-d: #166534; --bright: #4ade80; --deep: #163323;
+  --red: #b3261e; --ring: rgba(34,197,94,.3);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); line-height: 1.5;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+button { font: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid #f5b83d; outline-offset: 2px; }
+h1, h2 { margin: 0; line-height: 1.2; }
+h2 { font-size: 1.15rem; margin-bottom: .75rem; }
+.muted { color: var(--muted); }
+
+/* top bar */
+.topbar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .8rem 1.25rem; background: #fff; border-bottom: 1px solid var(--line);
+}
+.topbar strong { font-size: 1.35rem; font-style: italic; font-weight: 900; }
+.topbar div { display: flex; align-items: center; gap: 1rem; }
+#who { color: var(--muted); }
+.link {
+  background: none; border: 1.5px solid var(--line); border-radius: 8px;
+  padding: .35rem .85rem; color: var(--ink); font-weight: 600;
+  transition: border-color .15s, color .15s;
+}
+.link:hover { border-color: var(--green); color: var(--green); }
+
+.wrap { max-width: 780px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+.card {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 16px; padding: 1.35rem; margin-bottom: 1rem;
+}
+
+/* last week banner */
+.banner {
+  display: flex; gap: 1rem; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem; padding: .95rem 1.15rem;
+  background: #fff6d9; border: 1px solid #ecd27a; border-radius: 12px;
+}
+.banner button {
+  flex: none; background: #fff; border: 1.5px solid #b58a00; border-radius: 8px;
+  padding: .4rem .95rem; font-weight: 600;
+}
+.banner button:hover { background: #fff0b8; }
+
+/* weekly score: the one bold element */
+.score {
+  display: flex; align-items: center; gap: 1.75rem;
+  background: var(--deep); border-color: var(--deep); color: #fff; padding: 1.6rem;
+}
+.score h1 { font-size: 1.5rem; }
+.score p { margin: .3rem 0 0; }
+#score-msg { font-size: 1.1rem; }
+.score .muted { color: #a9c7b4; }
+.ring {
+  --p: 0; flex: none; width: 150px; height: 150px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: conic-gradient(var(--bright) calc(var(--p) * 1%), rgba(255,255,255,.14) 0);
+  transition: background .4s;
+}
+.ring span {
+  display: grid; place-items: center; width: 118px; height: 118px;
+  border-radius: 50%; background: var(--deep); font-size: 2.1rem; font-weight: 800;
+}
+
+/* notifications button */
+#notify {
+  margin-bottom: 1rem; background: #fff; color: var(--green);
+  border: 1.5px solid var(--green); border-radius: 10px; padding: .55rem 1.1rem; font-weight: 600;
+}
+#notify:hover { background: #eaf6ee; }
+
+/* add goal */
+.add-row { display: grid; grid-template-columns: 1fr 160px auto; gap: .75rem; align-items: end; }
+.add-row label { display: block; margin-bottom: .3rem; font-size: .92rem; font-weight: 600; }
+.add-row input {
+  width: 100%; height: 48px; padding: 0 .85rem; font: inherit; font-size: 1rem;
+  color: var(--ink); background: #fff; border: 1.5px solid #c9d6cd; border-radius: 10px;
+  transition: border-color .15s, box-shadow .15s;
+}
+.add-row input:hover { border-color: #9db3a4; }
+.add-row input:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 4px var(--ring); }
+.primary {
+  height: 48px; padding: 0 1.5rem; border: 0; border-radius: 10px;
+  background: var(--green); color: #fff; font-weight: 700;
+  transition: background-color .15s, transform .15s;
+}
+.primary:hover { background: var(--green-d); transform: translateY(-1px); }
+.error { display: block; min-height: 1.25rem; margin-top: .45rem; font-size: .88rem; color: var(--red); }
+
+/* goal list */
+#empty, #no-history { margin: 0; padding: .5rem 0; }
+#goal-list, #history { list-style: none; margin: 0; padding: 0; }
+#goal-list li {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .75rem;
+  padding: .8rem .4rem; border-bottom: 1px solid var(--line); border-radius: 8px;
+  transition: background-color .15s;
+}
+#goal-list li:hover { background: #f6faf7; }
+#goal-list li:last-child, #history li:last-child { border-bottom: 0; }
+#goal-list label { flex: 1 1 220px; display: flex; align-items: center; gap: .8rem; cursor: pointer; }
+#goal-list input[type="checkbox"] { flex: none; width: 1.4rem; height: 1.4rem; accent-color: var(--green); cursor: pointer; }
+#goal-list .text { overflow-wrap: anywhere; font-size: 1.03rem; }
+#goal-list .done .text { color: var(--muted); text-decoration: line-through; }
+.badge {
+  white-space: nowrap; font-size: .8rem; font-weight: 600;
+  background: #e6f4ea; color: var(--green-d); border-radius: 99px; padding: .15rem .7rem;
+}
+.del {
+  background: none; border: 0; border-radius: 8px; padding: .3rem .6rem;
+  color: var(--muted); font-size: .9rem; transition: color .15s, background-color .15s;
+}
+.del:hover { color: var(--red); background: #fdecea; }
+
+/* past weeks */
+#history li { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem .2rem; border-bottom: 1px solid var(--line); }
+#history strong { color: var(--green-d); font-size: 1.05rem; }
+
+/* toasts */
+#toasts {
+  position: fixed; right: 1rem; bottom: 1rem; z-index: 20;
+  display: grid; gap: .6rem; width: min(380px, calc(100vw - 2rem));
+}
+.toast {
+  display: flex; gap: .9rem; align-items: center; justify-content: space-between;
+  background: var(--ink); color: #fff; border-left: 5px solid var(--bright);
+  border-radius: 10px; padding: .85rem 1rem; box-shadow: 0 12px 30px rgba(0,0,0,.25);
+}
+.toast button { background: none; border: 0; color: #fff; font-size: 1.3rem; line-height: 1; }
+
+@media (max-width: 640px) {
+  .wrap { padding: 1rem .9rem 4rem; }
+  .score { flex-direction: column; text-align: center; gap: 1.1rem; }
+  .ring { width: 132px; height: 132px; }
+  .ring span { width: 104px; height: 104px; font-size: 1.9rem; }
+  .add-row { grid-template-columns: 1fr; }
+  .primary { width: 100%; }
+  .banner { flex-direction: column; align-items: stretch; text-align: center; }
+  #who { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<body class="app">
+    <header class="topbar">
+        <strong>Goalie📋</strong>
+        <div><span id="who"></span><button class="link" id="logout" type="button">Log out</button></div>
+    </header>
+    <main class="wrap">
+        <div id="review" class="banner" hidden></div>
+
+        <section class="card score">
+            <div class="ring" id="ring" role="img" aria-label="0 percent of goals completed"><span id="pct">0%</span></div>
+            <div>
+                <h1 id="week-label"></h1>
+                <p id="score-msg"></p>
+                <p class="muted" id="days-left"></p>
+            </div>
+        </section>
+
+        <button id="notify" type="button" hidden>Turn on browser reminders</button>
+
+        <form id="goal-form" class="card" novalidate>
+            <div class="add-row">
+                <div>
+                    <label for="goal-text">New goal for this week</label>
+                    <input type="text" id="goal-text" maxlength="100" placeholder="Read 20 pages every day" autocomplete="off">
+                </div>
+                <div>
+                    <label for="goal-time">Remind me at</label>
+                    <input type="time" id="goal-time">
+                </div>
+                <button class="primary" type="submit">Add goal</button>
+            </div>
+            <small class="error" id="goal-error"></small>
+        </form>
+
+        <section class="card">
+            <h2>This week's goals</h2>
+            <p class="muted" id="empty">No goals yet. Add one above to start your week.</p>
+            <ul id="goal-list"></ul>
+        </section>
+
+        <section class="card">
+            <h2>Past weeks</h2>
+            <p class="muted" id="no-history">Your weekly scores will appear here after your first full week.</p>
+            <ul id="history"></ul>
+        </section>
+    </main>
+    <div id="toasts" aria-live="polite"></div>
+    <script src="auth.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
+</body>
+</html>

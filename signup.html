@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign up</title>
+</head>
+<style>
+    
+:root { --ink:#14281c; --muted:#5b6b61; --line:#c9d6cd; --green:#15803d; --green-d:#166534; --ring:rgba(34,197,94,.3); --red:#b3261e; }
+    * { box-sizing: border-box; }
+    body {
+        margin: 0; min-height: 100vh; padding: 1.25rem;
+        display: grid; place-items: center;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        line-height: 1.5; color: var(--ink);
+        background-color: #14281c;
+        background-image: linear-gradient(rgba(8,36,18,.62), rgba(8,36,18,.62)), url("GOALS.jpg");
+        background-size: cover; background-position: center;
+    }
+    .card {
+        width: 100%; max-width: 440px; background: #fff;
+        border-radius: 16px; padding: 2rem 1.75rem;
+        box-shadow: 0 24px 60px rgba(0,0,0,.35);
+    }
+    .card.wide { max-width: 540px; }
+    .brand {
+        display: inline-block; margin-bottom: 1.1rem;
+        font-size: 1.5rem; font-style: italic; font-weight: 900;
+        color: var(--ink); text-decoration: none;
+    }
+    h1 { margin: 0 0 .25rem; font-size: 1.7rem; line-height: 1.2; }
+    .sub { margin: 0 0 1.5rem; color: var(--muted); }
+    .row { display: grid; grid-template-columns: 1fr 1fr; column-gap: .9rem; }
+    .field { margin-bottom: .45rem; }
+    label { display: block; margin-bottom: .3rem; font-size: .92rem; font-weight: 600; }
+    input, select {
+        width: 100%; height: 48px; padding: 0 .85rem;
+        font: inherit; font-size: 1rem; color: var(--ink); background: #fff;
+        border: 1.5px solid var(--line); border-radius: 10px;
+        transition: border-color .15s, box-shadow .15s;
+    }
+    input::placeholder { color: #8a9a90; }
+    input:hover, select:hover { border-color: #9db3a4; }
+    input:focus, select:focus { outline: none; border-color: var(--green); box-shadow: 0 0 0 4px var(--ring); }
+    input[aria-invalid="true"], select[aria-invalid="true"] { border-color: var(--red); }
+    input[aria-invalid="true"]:focus, select[aria-invalid="true"]:focus { box-shadow: 0 0 0 4px rgba(179,38,30,.2); }
+    .error { display: block; min-height: 1.25rem; margin-top: .2rem; font-size: .85rem; color: var(--red); }
+    .show-pw { display: flex; align-items: center; gap: .55rem; margin: .1rem 0 1rem; font-size: .92rem; font-weight: 500; cursor: pointer; }
+    .show-pw input { width: 1.15rem; height: 1.15rem; accent-color: var(--green); }
+    .form-error { min-height: 1.25rem; margin: 0 0 .5rem; font-size: .92rem; font-weight: 600; color: var(--red); }
+    button[type="submit"] {
+        width: 100%; height: 50px; border: 0; border-radius: 10px;
+        font: inherit; font-size: 1.05rem; font-weight: 700; color: #fff;
+        background: var(--green); cursor: pointer;
+        transition: background-color .15s, transform .15s;
+    }
+    button[type="submit"]:hover { background: var(--green-d); transform: translateY(-1px); }
+    button[type="submit"]:focus-visible { outline: 3px solid #f5b83d; outline-offset: 3px; }
+    button[type="submit"]:disabled { opacity: .65; cursor: wait; transform: none; }
+    .alt { margin: 1.25rem 0 0; text-align: center; color: var(--muted); }
+    .alt a { color: var(--green); font-weight: 700; }
+    a:focus-visible { outline: 3px solid #f5b83d; outline-offset: 2px; border-radius: 4px; }
+    @media (max-width: 520px) {
+        .card { padding: 1.5rem 1.15rem; }
+        .row { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+    <main class="card wide">
+        <a class="brand" href="index.html">Goalie📋</a>
+        <h1>Create your account</h1>
+        <p class="sub">Set goals, get reminders, and see your weekly score.</p>
+
+        <form id="signup-form" novalidate>
+            <div class="row">
+                <div class="field">
+                    <label for="surname">Surname</label>
+                    <input type="text" id="surname" name="surname" autocomplete="family-name">
+                    <small class="error" id="surname-error"></small>
+                </div>
+                <div class="field">
+                    <label for="firstname">Name</label>
+                    <input type="text" id="firstname" name="firstname" autocomplete="given-name">
+                    <small class="error" id="firstname-error"></small>
+                </div>
+            </div>
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" placeholder="you@gmail.com" autocomplete="email">
+                <small class="error" id="email-error"></small>
+            </div>
+            <div class="row">
+                <div class="field">
+                    <label for="pass">Password</label>
+                    <input type="password" id="pass" name="pass" autocomplete="new-password" data-password>
+                    <small class="error" id="pass-error"></small>
+                </div>
+                <div class="field">
+                    <label for="confirm">Confirm password</label>
+                    <input type="password" id="confirm" name="confirm" autocomplete="new-password" data-password>
+                    <small class="error" id="confirm-error"></small>
+                </div>
+            </div>
+            <label class="show-pw"><input type="checkbox" data-show-password> Show passwords</label>
+            <div class="field">
+                <label for="occupation">Occupation</label>
+                <select name="occupation" id="occupation">
+                    <option value="">Choose one</option>
+                    <option value="student">Student</option>
+                    <option value="teacher/lecturer">Teacher/Lecturer</option>
+                    <option value="employee">Employee</option>
+                    <option value="intern">Intern</option>
+                    <option value="entrepreneur">Entrepreneur</option>
+                    <option value="worker">Worker</option>
+                </select>
+                <small class="error" id="occupation-error"></small>
+            </div>
+            <p class="form-error" role="alert"></p>
+            <button type="submit">Create account</button>
+        </form>
+
+        <p class="alt">Already have an account? <a href="login.html">Log in</a></p>
+    </main>
+    <script src="auth.js"></script>
+</body>
+</html>
+</style>
+</head>
+</main>
+    <script src="auth.js"></script>
+    </body>
+</html>
